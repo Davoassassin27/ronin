@@ -210,10 +210,9 @@ El MVP exige arrancar en la desktop y en la notebook sin reinstalar. La prueba s
 2. Apagar, mover el NVMe a la otra máquina y arrancar (si hay panic, elegir `Ronin (safe mode - noapic)`).
 3. En la otra máquina, guardar la evidencia **antes de volver a mover el disco**:
    ```bash
-   sudo cp /var/log/hw-adapt-last.json /var/log/hw-adapt-$(date +%F)-otra-maquina.json
-   sudo bash /root/build-scripts/guest/90-verify.sh
-   sudo cp /var/log/ronin-verify.json /var/log/ronin-verify-$(date +%F)-otra-maquina.json
+   sudo bash /root/build-scripts/guest/91-portability-snapshot.sh
    ```
+   El script archiva `/var/log/hw-adapt-<fecha>-<board>.json` y `/var/log/ronin-verify-<fecha>-<board>.json`, y muestra el resumen de `board`, `mode`, `profile` y GPUs.
 4. Volver a la notebook, copiar los JSON a `reports/` y comparar.
 
 Criterios:
