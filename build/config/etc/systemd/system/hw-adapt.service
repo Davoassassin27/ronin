@@ -1,0 +1,19 @@
+[Unit]
+Description=Ronin hardware adaptation and audit
+Documentation=file:/usr/local/bin/hw-adapt.sh
+After=local-fs.target systemd-udev-settle.service
+Before=display-manager.service greetd.service sddm.service
+Wants=local-fs.target systemd-udev-settle.service
+ConditionPathExists=/sys/class/dmi/id
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/hw-adapt.sh
+TimeoutStartSec=120
+Nice=-5
+IOSchedulingClass=best-effort
+IOSchedulingPriority=2
+
+[Install]
+WantedBy=multi-user.target

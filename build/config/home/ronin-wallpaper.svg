@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#05070c"/>
+      <stop offset="52%" stop-color="#0b111b"/>
+      <stop offset="100%" stop-color="#121e2b"/>
+    </linearGradient>
+    <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#c34043" stop-opacity="0.45"/>
+      <stop offset="55%" stop-color="#c34043" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#c34043" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#102230"/>
+      <stop offset="100%" stop-color="#070c12"/>
+    </linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="9" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="22" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="1" fill="#dcd7ba" opacity="0.025"/>
+    </pattern>
+    <pattern id="hex" width="56" height="96" patternUnits="userSpaceOnUse">
+      <path d="M28 0 L56 16 L56 48 L28 64 L0 48 L0 16 Z" fill="none" stroke="#2d4f67" stroke-opacity="0.18" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="2560" height="1440" fill="url(#sky)"/>
+  <rect width="2560" height="1440" fill="url(#hex)" opacity="0.55"/>
+
+  <!-- perspective grid -->
+  <g stroke="#2d4f67" stroke-opacity="0.28" stroke-width="1">
+    <path d="M1280 620 L-200 1440"/><path d="M1280 620 L120 1440"/><path d="M1280 620 L440 1440"/>
+    <path d="M1280 620 L760 1440"/><path d="M1280 620 L1040 1440"/><path d="M1280 620 L1280 1440"/>
+    <path d="M1280 620 L1520 1440"/><path d="M1280 620 L1800 1440"/><path d="M1280 620 L2120 1440"/>
+    <path d="M1280 620 L2400 1440"/><path d="M1280 620 L2760 1440"/>
+  </g>
+  <g stroke="#2d4f67" stroke-opacity="0.16" stroke-width="1">
+    <path d="M0 900 H2560"/><path d="M0 980 H2560"/><path d="M0 1080 H2560"/>
+    <path d="M0 1200 H2560"/><path d="M0 1340 H2560"/>
+  </g>
+
+  <!-- neon sun -->
+  <circle cx="1720" cy="500" r="430" fill="url(#sunGlow)"/>
+  <circle cx="1720" cy="500" r="218" fill="#12070a" stroke="#c34043" stroke-width="3" filter="url(#softGlow)"/>
+  <circle cx="1720" cy="500" r="218" fill="none" stroke="#e82424" stroke-width="1.5" stroke-dasharray="3 17" opacity="0.9"/>
+  <circle cx="1720" cy="500" r="252" fill="none" stroke="#c34043" stroke-width="1" stroke-dasharray="46 28" opacity="0.55"/>
+  <circle cx="1720" cy="500" r="284" fill="none" stroke="#7e9cd8" stroke-width="1" stroke-dasharray="2 30" opacity="0.35"/>
+
+  <!-- data waves -->
+  <rect x="0" y="980" width="2560" height="460" fill="url(#sea)"/>
+  <g fill="none" stroke-linejoin="round">
+    <path d="M0 1080 C220 1020 420 1130 680 1060 C940 990 1140 1110 1400 1040 C1660 970 1880 1090 2140 1020 C2320 972 2460 1030 2560 1000" stroke="#2d4f67" stroke-width="46" opacity="0.55"/>
+    <path d="M0 1160 C240 1090 440 1200 720 1120 C1000 1040 1200 1160 1480 1090 C1760 1020 1980 1140 2260 1070 C2400 1037 2500 1080 2560 1060" stroke="#37617f" stroke-width="34" opacity="0.5"/>
+    <path d="M0 1240 C250 1170 470 1270 760 1190 C1050 1110 1260 1230 1550 1160 C1840 1090 2070 1200 2360 1130 C2440 1110 2510 1130 2560 1120" stroke="#4a7696" stroke-width="22" opacity="0.45"/>
+  </g>
+  <g fill="#7e9cd8">
+    <circle cx="220" cy="1085" r="4"/><circle cx="680" cy="1062" r="4"/><circle cx="1140" cy="1113" r="4"/>
+    <circle cx="1400" cy="1042" r="4"/><circle cx="1880" cy="1092" r="4"/><circle cx="2320" cy="974" r="4"/>
+    <circle cx="760" cy="1190" r="3"/><circle cx="1550" cy="1160" r="3"/><circle cx="2360" cy="1130" r="3"/>
+  </g>
+
+  <!-- neon torii (left) -->
+  <g filter="url(#glow)" fill="none" stroke-linecap="square">
+    <path d="M330 610 C430 590 610 590 710 610" stroke="#7e9cd8" stroke-width="10" opacity="0.9"/>
+    <path d="M300 640 C420 620 620 620 740 640" stroke="#c34043" stroke-width="6" opacity="0.85"/>
+    <path d="M360 660 L360 980" stroke="#7e9cd8" stroke-width="9" opacity="0.8"/>
+    <path d="M680 660 L680 980" stroke="#7e9cd8" stroke-width="9" opacity="0.8"/>
+    <path d="M380 760 H660" stroke="#7e9cd8" stroke-width="7" opacity="0.7"/>
+    <path d="M340 1000 H700" stroke="#2d4f67" stroke-width="4" opacity="0.7"/>
+  </g>
+  <g stroke="#c34043" stroke-width="2" opacity="0.5">
+    <path d="M360 700 L360 760"/><path d="M680 700 L680 760"/>
+  </g>
+
+  <!-- platform -->
+  <path d="M1660 1060 L2120 1010 L2210 1080 L1720 1140 Z" fill="#080b11" stroke="#2d4f67" stroke-width="2"/>
+  <path d="M1720 1140 L2210 1080 L2210 1110 L1720 1170 Z" fill="#05070b" stroke="#c34043" stroke-width="1" opacity="0.6"/>
+
+  <!-- cyber ronin -->
+  <g filter="url(#glow)">
+    <!-- cloak -->
+    <path d="M1900 800 L1965 770 L2025 805 L2045 980 L1870 990 L1880 870 Z" fill="#080a0f" stroke="#7e9cd8" stroke-width="1.6" opacity="0.95"/>
+    <!-- hat -->
+    <path d="M1875 735 C1900 700 1990 700 2020 735 L2005 745 C1975 720 1920 720 1890 745 Z" fill="#05070b" stroke="#7e9cd8" stroke-width="1.4"/>
+    <!-- head / visor -->
+    <circle cx="1950" cy="752" r="26" fill="#0a0d13" stroke="#7e9cd8" stroke-width="1.2"/>
+    <path d="M1934 752 H1966" stroke="#e82424" stroke-width="3"/>
+    <!-- legs -->
+    <path d="M1905 960 L1880 1060 L1915 1062 L1940 975 Z" fill="#05070b" stroke="#7e9cd8" stroke-width="1.2"/>
+    <path d="M1990 965 L2035 1050 L2065 1035 L2020 955 Z" fill="#05070b" stroke="#7e9cd8" stroke-width="1.2"/>
+    <!-- arm + katana -->
+    <path d="M2015 830 C2045 842 2075 862 2095 888" stroke="#080a0f" stroke-width="18" stroke-linecap="round"/>
+    <path d="M2005 845 L2160 1010" stroke="#dcd7ba" stroke-width="5" stroke-linecap="round"/>
+    <path d="M1995 835 L2020 862" stroke="#c34043" stroke-width="9" stroke-linecap="round"/>
+    <path d="M2090 940 L2110 960" stroke="#e82424" stroke-width="2"/>
+  </g>
+
+  <!-- hanko + wordmark (Omarchy-minimal) -->
+  <g>
+    <rect x="200" y="130" width="84" height="84" rx="4" fill="#c34043" opacity="0.92"/>
+    <text x="242" y="191" text-anchor="middle" font-family="JetBrains Mono, DejaVu Sans Mono, monospace" font-size="54" font-weight="700" fill="#f2ecdc">R</text>
+  </g>
+  <g>
+    <text x="260" y="1300" font-family="JetBrains Mono, DejaVu Sans Mono, monospace" font-size="86" letter-spacing="20" fill="#dcd7ba" opacity="0.92">RONIN</text>
+    <path d="M262 1330 H700" stroke="#c34043" stroke-width="2" opacity="0.8"/>
+    <text x="262" y="1370" font-family="JetBrains Mono, DejaVu Sans Mono, monospace" font-size="18" letter-spacing="6" fill="#7e9cd8" opacity="0.75">PORTABLE WORKSTATION // CACHYOS + OMARCHY</text>
+  </g>
+
+  <!-- vignette + scanlines -->
+  <radialGradient id="vig" cx="50%" cy="45%" r="78%">
+    <stop offset="55%" stop-color="#000" stop-opacity="0"/>
+    <stop offset="100%" stop-color="#000" stop-opacity="0.5"/>
+  </radialGradient>
+  <rect width="2560" height="1440" fill="url(#vig)"/>
+  <rect width="2560" height="1440" fill="url(#scan)"/>
+</svg>
