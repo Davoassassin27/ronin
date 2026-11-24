@@ -33,6 +33,34 @@ foreach ($item in $items) {
   }
 }
 
+$kenseiRemote = "$Destination/kensei"
+Invoke-Ssh -Config $config -User $User -Command "mkdir -p $kenseiRemote/data" | Out-Null
+$kenseiItems = @(
+  @{ Path = (Join-Path $repo 'kensei\src'); Dest = "$kenseiRemote/" },
+  @{ Path = (Join-Path $repo 'kensei\prompts'); Dest = "$kenseiRemote/" },
+  @{ Path = (Join-Path $repo 'kensei\config'); Dest = "$kenseiRemote/" },
+  @{ Path = (Join-Path $repo 'kensei\scripts'); Dest = "$kenseiRemote/" },
+  @{ Path = (Join-Path $repo 'kensei\eval'); Dest = "$kenseiRemote/" },
+  @{ Path = (Join-Path $repo 'kensei\packaging'); Dest = "$kenseiRemote/" },
+  @{ Path = (Join-Path $repo 'kensei\modelfiles'); Dest = "$kenseiRemote/" },
+  @{ Path = (Join-Path $repo 'kensei\data\manual'); Dest = "$kenseiRemote/data/" },
+  @{ Path = (Join-Path $repo 'kensei\pyproject.toml'); Dest = "$kenseiRemote/" },
+  @{ Path = (Join-Path $repo 'kensei\README.md'); Dest = "$kenseiRemote/" },
+  @{ Path = (Join-Path $repo 'kensei\LICENSE'); Dest = "$kenseiRemote/" },
+  @{ Path = (Join-Path $repo 'kensei\NOTICE'); Dest = "$kenseiRemote/" }
+)
+foreach ($item in $kenseiItems) {
+  if (-not (Test-Path -LiteralPath $item.Path)) {
+    Write-Warn "Falta $($item.Path); se omite del payload Kensei."
+    continue
+  }
+  Write-Info "scp kensei/$(Split-Path $item.Path -Leaf)"
+  $code = Invoke-Scp -Config $config -User $User -Source $item.Path -Destination $item.Dest -Recurse
+  if ($code -ne 0) {
+    Write-Warn "scp fallo para Kensei: $($item.Path)"
+  }
+}
+
 # SSH public key -> authorized_keys (for 30-configure.sh)
 $key = Resolve-ProjectPath (Get-ConfigValue $config 'SSH_KEY' "$HOME\.ssh\ronin_ed25519")
 $pub = "$key.pub"

@@ -222,7 +222,9 @@ Criterios:
 - `/var/log/hw-adapt.log` registra `board-changed from=... to=...`.
 - `90-verify.sh` sigue en `FAIL=0` (los warns de GPU/microcode dependen del hardware).
 
-**Estado 23/11:** notebook validada (`0C3WG4`, modo `laptop`, perfil `balanced`, Vulkan RADV). Boot en la desktop pendiente.
+**Estado 24/11:** notebook validada (`0C3WG4`, modo `laptop`, perfil `balanced`, Vulkan RADV) y desktop validada (`B450M DS3H-CF`, modo `desktop`, perfil `performance`, GPU AMD). El verify nativo de la desktop no se ejecutó; queda como comprobación opcional.
+
+Evidencia: `reports/hw-adapt-log-portability-20261124.txt` (líneas `board-changed` a `B450M DS3H-CF` y `profile=performance mode=desktop`).
 
 ## 6. Evidencia a guardar
 

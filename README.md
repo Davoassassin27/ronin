@@ -1,122 +1,139 @@
-# Ronin — CachyOS portable de ingeniería
+![Ronin — Linux portable de ingeniería](brand/ronin/readme-hero.svg)
 
-Sistema Linux portable (desktop + notebook) basado en **CachyOS** (`linux-cachyos`, `x86-64-v3`) con el entorno **Omarchy** (Hyprland, teclado/terminal first), stack de Software Engineering, DevOps, Data Science y AI local, más un módulo de gaming opcional.
+# Ronin — Linux portable de ingeniería
 
-El objetivo de este repositorio es que la construcción sea **reproducible, auditable y verificable**, no una sucesión de comandos manuales.
+**Un solo NVMe. Dos máquinas. Cero reinstalaciones.** Ronin es un Linux portable basado en **CachyOS + Omarchy** que detecta el hardware en cada arranque, elige el perfil correcto y deja evidencia de cada cambio.
 
-## Nombre y filosofía
+[![MIT](https://img.shields.io/badge/license-MIT-111111?style=flat-square)](LICENSE)
+[![Docs CC BY 4.0](https://img.shields.io/badge/docs-CC%20BY%204.0-e6c384?style=flat-square&labelColor=111111)](LICENSE-DOCS)
+[![Verificado](https://img.shields.io/badge/verificado-67%20PASS%20%2F%200%20FAIL-2ea043?style=flat-square&labelColor=111111)](#verificación-en-hardware-real)
+[![CachyOS](https://img.shields.io/badge/CachyOS-x86--64--v3-1793d1?style=flat-square&labelColor=111111)](https://cachyos.org)
+[![Omarchy](https://img.shields.io/badge/Omarchy-Hyprland-e6c384?style=flat-square&labelColor=111111)](https://omarchy.org)
 
-**Ronin** — el samurái sin amo. El sistema no pertenece a una máquina: se mueve entre la desktop y la notebook, reconoce el terreno en cada arranque y se adapta sin preguntar ni depender de un hogar fijo.
+El repositorio no es una lista de comandos: es la cadena completa y versionada para construir la imagen en QEMU, provisionarla, verificarla, migrarla a un NVMe y actualizarla.
 
-Los principios de diseño (zen / bushido) que gobiernan el proyecto:
+## Por qué Ronin
 
-- **Sin amo:** ningún hardware, proveedor ni instalador interactivo decide por nosotros. Boot extraíble, UUIDs reales y repositorios fijos.
-- **Cambia, no se rompe:** `hw-adapt.service` lee el entorno en cada boot, aplica el perfil de energía/GPU correcto y lo deja registrado. Como el rōnin, no resiste el cambio de terreno.
-- **Disciplina antes que velocidad:** cada paso tiene un script, un log y una verificación. La reproducibilidad manda sobre la ocurrencia.
-- **Ligero y afilado:** zram en vez de swap, Btrfs con subvolúmenes aislados, initramfs universal sin `autodetect`, servicios de juego que solo despiertan cuando se los necesita.
-- **Deja rastro:** todo fallo de montaje o de uso se escribe en un log estructurado (`/var/log/ronin/ux-trace.jsonl`) para que la experiencia sea trazable y depurable.
+- **Portable de verdad.** El mismo disco arranca en una notebook Dell y en una desktop Gigabyte; `hw-adapt.service` cambia energía y GPU según el chasis, sin intervención.
+- **Reproducible.** ISO con hash fijado, `pacstrap` no interactivo, subvolúmenes Btrfs, `systemd-boot` extraíble e initramfs universal.
+- **Verificado.** 67 chequeos automáticos de boot, discos, red, servicios, seguridad y UX. El resultado se guarda en JSON.
+- **AI local incluida.** Ollama, Vulkan y [Kensei](https://github.com/Davoassassin27/kensei), el agente de terminal con guard de alcance y auditoría.
+- **Gaming opcional.** Steam, gamemode, MangoHud y lib32, sin servicios despiertos al pedo.
+- **Trazable.** Cada fallo de montaje o de uso queda en `/var/log/ronin/ux-trace.jsonl`.
 
-- [PROJECT.md](PROJECT.md) — especificación original (fuente de verdad funcional).
-- [docs/00-ROADMAP.md](docs/00-ROADMAP.md) — plan F0 → MVP, tareas y criterios de salida.
-- [docs/01-ARCHITECTURE.md](docs/01-ARCHITECTURE.md) — arquitectura, particiones, subvolúmenes, boot y flujos.
-- [docs/02-RUNBOOK-BUILD.md](docs/02-RUNBOOK-BUILD.md) — procedimiento de construcción en QEMU.
-- [docs/03-RUNBOOK-MIGRATION.md](docs/03-RUNBOOK-MIGRATION.md) — migración al NVMe externo.
-- [docs/04-VERIFICATION.md](docs/04-VERIFICATION.md) — matriz de aceptación y verificación automática.
-- [docs/05-ADRS.md](docs/05-ADRS.md) — decisiones de arquitectura.
-- [docs/06-RISKS.md](docs/06-RISKS.md) — riesgos y mitigaciones.
-- [docs/07-OPEN-QUESTIONS.md](docs/07-OPEN-QUESTIONS.md) — preguntas a resolver antes/durante el build.
-- [docs/08-BUILD-LOG.md](docs/08-BUILD-LOG.md) — bitácora de la primera construcción real e incidencias.
+> [!IMPORTANT]
+> **MVP validado en hardware real.** Última corrida en la Dell Inspiron 15 3525: **67 PASS / 0 WARN / 0 FAIL**, kernel `7.3.5-2-cachyos`, 0 updates y 0 migraciones pendientes. El mismo NVMe también arrancó nativo en la desktop **Gigabyte B450M DS3H-CF** con `mode=desktop` y `profile=performance`.
 
-## Estado actual (2026-11-23)
+![Ronin en la desktop: Hyprland, Quickshell, tema Ronin tech y wallpaper ukiyo-e de dominio público](brand/ronin/screenshot-desktop.jpg)
 
-| Fase | Estado | Notas |
-| --- | --- | --- |
-| F0 — Host y repositorio | ✅ completada | QEMU 11.1.0, ISO verificada, imagen 120 GiB, clave SSH, primer boot live |
-| F1 — Imagen base CachyOS | ✅ completada | GPT, ESP, Btrfs + 6 subvolúmenes, fstab por UUID, initramfs universal, systemd-boot extraíble, `mkinitcpio -P` OK |
-| F2 — Entorno Omarchy | ✅ completada | Overlay + SDDM + Hyprland + `hardware-auto.lua`; la validación gráfica queda limitada por la GPU virtual (TCG) |
-| F3 — Dev / DevOps | ✅ completada | Toolchain (uv/rust/go/node), Docker, kubectl/helm, `x86-64-v3` |
-| F4 — AI local | ✅ completada | Ollama activo en `127.0.0.1:11434`, stack Vulkan y directorios `ai-models`/`workspace`; Vulkan no verificable en QEMU |
-| F5 — Gaming | ✅ completada | Steam, gamemode, MangoHud y lib32; sin launchers al arranque |
-| F6 — Portabilidad y hardening | ✅ completada | `hw-adapt.service`, microcodes, `usbcore.autosuspend=-1`, UFW, sysctl, root SSH deshabilitado |
-| F7 — Migración NVMe / MVP | 🟡 casi completa | Migración real al NVMe y boot en la Inspiron OK (67/0/0); falta el boot de validación en la desktop para cerrar la portabilidad |
+## Inicio rápido
 
-**Verificación final en la PC real (kernel 7.3.5, 23/11):** `67 PASS / 0 WARN / 0 FAIL` ([`reports/verify-ronin-final-20261123.json`](reports/verify-ronin-final-20261123.json)), con Hyprland/Quickshell, tema **Ronin tech** (Kanagawa), wallpaper del duelo de **Miyamoto Musashi** (ukiyo-e de Utagawa Yoshifusa, dominio público), barra, zram y Vulkan (AMD RADV) funcionando. Sin warnings.
-
-**Verificación de la imagen dorada:** `62 PASS / 2 WARN / 0 FAIL` ([`reports/verify-ronin-final.json`](reports/verify-ronin-final.json)).
-
-**Migración real al NVMe (23/11):** el disco de 1 TB arrancó en la **Dell Inspiron 15 3525** con kernel 7.3.5-2, root Btrfs `rw`, zram, Docker, **0 migraciones**, **0 updates** y **67 PASS / 0 WARN / 0 FAIL** ([`reports/verify-ronin-final-20261123.json`](reports/verify-ronin-final-20261123.json)). La tabla final quedó DATOS/ESP/ROOT con UUIDs preservados. Falta un único boot en la desktop para cerrar la validación de portabilidad entre las dos máquinas físicas.
-
-**Ensayo F7 en QEMU:** la migración se ejecutó de punta a punta sobre un disco de prueba de 1 TB y arrancó sola con **61 PASS / 3 WARN / 0 FAIL** ([`reports/verify-migrated-final.json`](reports/verify-migrated-final.json), [`reports/migration-rehearsal.md`](reports/migration-rehearsal.md)). El ensayo validó el procedimiento; la migración real lo superó.
-
-> **Hallazgo importante:** WHPX congeló el guest instalado (kernel 7.3.3) tras el reboot. `build.env` usa `VM_ACCEL=tcg` por defecto; el build es más lento pero estable. Ver [docs/08-BUILD-LOG.md](docs/08-BUILD-LOG.md).
-
-## Inicio rápido (host Windows)
-
-Requisitos: Windows 10/11 x64, virtualización habilitada, 32 GB de RAM recomendados, ~140 GB libres en la unidad de imágenes, QEMU y curl.
+Probado en Windows 10/11 x64 con QEMU. Necesitás virtualización, ~140 GB libres y 32 GB de RAM recomendados.
 
 ```powershell
-# 1. Diagnóstico del host
-.\build.ps1 doctor
+git clone https://github.com/Davoassassin27/ronin.git
+cd ronin
 
-# 2. Instalar/verificar QEMU (si falta)
-.\build.ps1 install-qemu
-
-# 3. Descargar y verificar la ISO de CachyOS
-.\build.ps1 fetch-iso
-
-# 4. Crear el disco crudo de 120 GiB y la NVRAM UEFI
-.\build.ps1 image
-
-# 5. Arrancar la ISO en QEMU (UEFI + WHPX)
-.\build.ps1 up-iso
-
-# 6. En la consola de la ISO: habilitar SSH y ejecutar el preflight
-#    systemctl start sshd
-#    passwd root
-#    curl -fsSL .../bootstrap-live.sh | bash   (ver runbook)
+.\build.ps1 doctor        # diagnóstico del host
+.\build.ps1 fetch-iso     # descarga y verifica la ISO de CachyOS
+.\build.ps1 image         # disco crudo de 120 GiB + NVRAM UEFI
+.\build.ps1 up-iso        # arranca la ISO en QEMU
 ```
 
-Después del primer arranque del sistema instalado:
+Con la ISO arriba, habilitá SSH dentro del guest (`systemctl start sshd` + `passwd root`) y desde el host:
 
 ```powershell
-.\build.ps1 ssh          # consola root en el guest
-.\build.ps1 provision    # copia scripts y ejecuta 40 → 95
-.\build.ps1 verify       # suite de aceptación
-.\build.ps1 test-unit    # tests de disco/UX + reports/unit-*.json
+.\build.ps1 push          # copia scripts y configuración
+.\build.ps1 provision     # ejecuta la instalación completa
+.\build.ps1 verify        # suite de aceptación
 ```
+
+La guía paso a paso, con los puntos de decisión y la migración al NVMe, está en [docs/02-RUNBOOK-BUILD.md](docs/02-RUNBOOK-BUILD.md) y [docs/03-RUNBOOK-MIGRATION.md](docs/03-RUNBOOK-MIGRATION.md).
+
+## Verificación en hardware real
+
+| Máquina | Modo detectado | Perfil | Resultado |
+| --- | --- | --- | --- |
+| Dell Inspiron 15 3525 | `laptop` | `balanced` · GPU AMD | **67 PASS / 0 WARN / 0 FAIL** · [JSON](reports/verify-ronin-final-20261123.json) |
+| Gigabyte B450M DS3H-CF | `desktop` | `performance` · GPU AMD | Boot nativo + cambio de board · [log](reports/hw-adapt-log-portability-20261124.txt) |
+| QEMU (ensayo de migración) | `desktop` | `performance` | 61 PASS / 3 WARN / 0 FAIL · [evidencia](reports/verify-migrated-final.json) |
+
+El ensayo de migración de punta a punta está documentado en [reports/migration-rehearsal.md](reports/migration-rehearsal.md). La matriz de aceptación completa vive en [docs/04-VERIFICATION.md](docs/04-VERIFICATION.md).
+
+## Cómo se adapta
+
+1. **Boot:** `systemd-boot` carga un initramfs universal con los módulos de ambas máquinas.
+2. **Detección:** `hw-adapt.service` lee DMI, GPU y chasis; compara con el último board visto.
+3. **Aplicación:** activa `laptop/balanced` o `desktop/performance`, ajusta GPU, audio y red.
+4. **Registro:** escribe el resultado en `/var/log/hw-adapt-last.json` y `/var/log/hw-adapt.log`.
+
+## Kensei: el agente de terminal
+
+**Kensei** es el proyecto hermano: un SLM local que opera la terminal con un bucle `observar → proponer → ejecutar → verificar`, guard de alcance, auditoría y RAG documental. Ronin lo integra con `build/guest/65-kensei.sh` y descarga el modelo en el primer boot.
+
+- Repositorio: **[Davoassassin27/kensei](https://github.com/Davoassassin27/kensei)**
+- Modelo base: Qwen2.5-Coder-7B-Instruct, cuantizado para Ollama.
+- El scope arranca en `authorized: false`; hay que configurarlo y ejecutar con `--execute`.
+
+## Actualizaciones
+
+```bash
+ronin update          # wrapper de marca sobre omarchy update
+systemctl --user status ronin-update-check.timer
+```
+
+El chequeo corre a diario y **no aplica updates solo**. El detalle está en [docs/09-UPDATES.md](docs/09-UPDATES.md).
 
 ## Mapa del repositorio
 
-```
-build.ps1                     CLI del host (PowerShell 5.1+)
+```text
+build.ps1                 CLI del host (PowerShell 5.1+)
 build/
-  build.env                   parámetros versionados (sin secretos)
-  build.local.env.example     plantilla de secretos locales
-  iso/                        ISO (ignorada por git)
-  config/                     archivos que se instalan en el guest
-    etc/                      systemd, hw-adapt, docker, zram, sysctl...
-    usr/local/bin/            hw-adapt.sh
-    home/                     README de workspace
-  scripts/host/               diagnóstico, QEMU, ISO, imagen, SSH
-  scripts/guest/              particionado, pacstrap, configuración, stack, verificación
-docs/                         plan, arquitectura, runbooks, ADRs, riesgos
-tests/                        lint + unit tests (disco/UX) y trazabilidad
+  build.env               parámetros versionados (sin secretos)
+  iso/                    ISO (ignorada por git)
+  config/                 archivos que se instalan en el guest
+  scripts/host/           diagnóstico, QEMU, ISO, imagen, SSH
+  guest/                  particionado, pacstrap, configuración, stack, verificación
+docs/                     arquitectura, runbooks, ADRs, riesgos, updates
+tests/                    lint, unit tests y trazabilidad
+brand/                    marca oficial (SVG/PNG, iconos, paleta)
+reports/                  evidencia de verificación publicada
 ```
 
-## Decisiones críticas ya tomadas
-
-1. **La imagen se construye en QEMU, nunca sobre el SSD externo.** El disco externo solo se toca en F7 con `migrate-to-nvme.sh` y confirmación explícita.
-2. **Instalación manual con `pacstrap`, no el instalador interactivo de CachyOS.** Permite fijar paquetes, subvolúmenes, kernel e initramfs de forma reproducible.
-3. **`systemd-boot` con ruta extraíble** (`EFI/BOOT/BOOTX64.EFI`), en lugar de Limine/GRUB. La migración conserva UUIDs y el bootloader no depende del número de partición.
-4. **Sin swap física; `zram` al 50 % con zstd.**
-5. **Omarchy se integra como overlay de escritorio, no con su instalador.** El instalador de Omarchy 4.5 aborta explícitamente en CachyOS y exige Limine. Ver [ADR-001](docs/05-ADRS.md#adr-001-integración-de-omarchy-sobre-cachyos) y el *decision gate* de F2.
-
-## Estado de la ISO
-
-- Archivo: `build/iso/cachyos-desktop-linux-260809.iso`
-- SHA-256 esperado: `959f6577f45e25ee9fd8c220fd221b08e4ea79412c7315c0f922dd6d86d5e33c`
-- Verificación: `.\build.ps1 fetch-iso` (idempotente; no vuelve a descargar si el hash coincide).
+Kensei vive en su propio repositorio. El build lo detecta si está clonado en `kensei/`; si no, lo clona desde GitHub durante el provisioning (`KENSEI_REPO` y `KENSEI_REF` en `build/build.env`).
 
 ## Seguridad
 
-Esta especificación **no incluye cifrado de disco**. Para un dispositivo portable eso es un riesgo alto (pérdida/robo). El MVP respeta la especificación, pero [ADR-007](docs/05-ADRS.md#adr-007-sin-cifrado-de-disco-en-el-mvp) deja el cifrado LUKS2 como decisión pendiente para post-MVP. No guardar credenciales reales en el repositorio.
+- El MVP **no incluye cifrado de disco**. Es una decisión consciente y pendiente: ver [ADR-007](docs/05-ADRS.md#adr-007-sin-cifrado-de-disco-en-el-mvp).
+- UFW activo, SSH root deshabilitado, `usbcore.autosuspend=-1` y sysctl endurecido.
+- Sin credenciales, claves privadas ni datos personales en el repositorio.
+- Kensei bloquea comandos destructivos y objetivos fuera de su scope; cada tool-call se audita.
+
+## Documentación
+
+| Documento | Para qué |
+| --- | --- |
+| [PROJECT.md](PROJECT.md) | especificación funcional original |
+| [docs/00-ROADMAP.md](docs/00-ROADMAP.md) | fases F0 → MVP y criterios de salida |
+| [docs/01-ARCHITECTURE.md](docs/01-ARCHITECTURE.md) | particiones, subvolúmenes, boot y flujos |
+| [docs/04-VERIFICATION.md](docs/04-VERIFICATION.md) | matriz de aceptación |
+| [docs/05-ADRS.md](docs/05-ADRS.md) | decisiones de arquitectura |
+| [docs/08-BUILD-LOG.md](docs/08-BUILD-LOG.md) | bitácora de la construcción real |
+| [docs/09-UPDATES.md](docs/09-UPDATES.md) | updates y chequeo diario |
+
+## Contribuir
+
+- Abrí un issue con la máquina, el kernel y el JSON de verificación (sin datos personales).
+- Para cambios de build, corré `tests/lint.ps1` y `tests/lint.sh`; si cambia la matriz, actualizá [docs/04-VERIFICATION.md](docs/04-VERIFICATION.md).
+- No incluyas credenciales, claves privadas, discos crudos ni pesos de modelos.
+
+## Licencia
+
+- **Código:** [MIT](LICENSE).
+- **Documentación y marca:** [CC BY 4.0](LICENSE-DOCS).
+- **Componentes upstream:** ver [NOTICE](NOTICE).
+- **Kensei:** código MIT; corpus, datasets y pesos tienen licencias propias y no se distribuyen desde este repositorio.
+
+La marca Ronin usa una silueta de perfil basada en una imagen **CC0** del Met Museum; el wallpaper ukiyo-e es de dominio público. Atribuciones completas en [brand/README.md](brand/README.md).
+
+Mantenido por [@Davoassassin27](https://github.com/Davoassassin27).

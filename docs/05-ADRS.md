@@ -441,3 +441,38 @@ La migración a F7 se ejecuta **sin cifrar**, confirmando ADR-007. El usuario lo
 - (+) MVP sin cambios de última hora y con la verificación ya en verde.
 - (−) Riesgo de exposición de datos si se pierde el NVMe.
 - (−) La decisión debe revisarse antes de salir con el equipo a la calle (H-01/S-01 en `07-OPEN-QUESTIONS.md`).
+
+---
+
+## ADR-018: Kensei — SLM de terminal con LoRA + RAG
+
+**Fecha:** 2026-11-23
+**Estado:** Proposed — scaffold, corpus y dataset listos; entrenamiento bloqueado por hardware (H-01).
+
+### Contexto
+
+Ronin necesita un modelo local que opere la terminal, diagnostique el sistema y asista en seguridad ofensiva **solo en alcance autorizado**. Un modelo base de 7B no conoce el protocolo de herramientas, el estilo de Ronin ni las fuentes documentales (Arch Wiki, HackTricks, PayloadsAllTheThings, The Hacker Recipes, tldr, GTFOBins). El corpus completo no cabe en un LoRA y cambia todas las semanas.
+
+### Decisión
+
+1. **Base:** `Qwen/Qwen2.5-Coder-7B-Instruct` (Apache-2.0), con variante abliterada opcional.
+2. **Conducta:** QLoRA 4-bit (r=32, alpha=64) para formato `<tool_call>`, método, estilo y negativas.
+3. **Hechos:** RAG local SQLite FTS5 sobre el corpus; se actualiza sin reentrenar.
+4. **Manos:** CLI Python con guard de alcance, `--execute`, confirmación y auditoría.
+5. **Shell/TUI:** zsh real con ghost autocomplete (`zsh-autosuggestions`), `kensei <prompt>` y `kensei --auto` con human-in-the-loop; empaquetada en `/usr/local` e integrada al build con `65-kensei.sh`.
+6. **Dojo:** 29 casos determinísticos para comparar base vs fine-tune.
+7. **Licencias:** corpus y pesos **privados**; se publica el código, no el dataset combinado.
+
+### Consecuencias
+
+- (+) Modelo portable (Q4 en notebook) y actualizable sin reentrenar.
+- (+) El guard falla cerrado: sin `scope.yaml` autorizado no hay red.
+- (+) Cada tool-call queda auditada.
+- (−) Dos sistemas que mantener (adapter + índice).
+- (−) El guard usa regex; no es un sandbox.
+- (−) K3 requiere GPU >= 12–16 GB o cloud.
+- (−) Las licencias impiden publicar el adapter sin revisión legal.
+
+### Implementación
+
+`kensei/` dentro de este repo. Detalle en `kensei/docs/PLAN.md`, `DATASETS.md`, `TRAINING.md`, `SAFETY.md`, `MODEL-CARD.md` y `DECISIONS.md`.

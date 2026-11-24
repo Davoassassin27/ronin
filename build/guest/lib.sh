@@ -38,6 +38,10 @@ load_config() {
   : "${OMARCHY_REF:=quattro}"
   : "${INSTALL_NVIDIA:=yes}"
   : "${INSTALL_GAMING:=yes}"
+  : "${INSTALL_KENSEI:=yes}"
+  : "${KENSEI_PRELOAD_MODEL:=no}"
+  : "${KENSEI_REPO:=https://github.com/Davoassassin27/kensei.git}"
+  : "${KENSEI_REF:=main}"
   : "${ENABLE_FIREWALL:=yes}"
   : "${OMARCHY_AUTOLOGIN:=yes}"
 }

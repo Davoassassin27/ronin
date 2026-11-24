@@ -3,9 +3,14 @@ build/iso/*
 !build/iso/.gitkeep
 build/ssh/
 build/build.local.env
+build/brand/
 images/
 logs/
-reports/
+reports/*
+!reports/verify-ronin-final-20261123.json
+!reports/verify-migrated-final.json
+!reports/hw-adapt-log-portability-20261124.txt
+!reports/migration-rehearsal.md
 *.img
 *.qcow2
 *.raw
@@ -13,6 +18,13 @@ reports/
 *.fd
 *.pid
 *.log
+
+# Kensei lives in its own repository; keep a local checkout here for builds
+/kensei/
+/sync-kensei.ps1
+
+# Terminal capture artifact
+/typescript
 
 # OS / editor noise
 .DS_Store

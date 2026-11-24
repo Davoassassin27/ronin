@@ -3,11 +3,12 @@
 # =============================================================================
 $ErrorActionPreference = 'Stop'
 $repo = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
+$skip = '\\\.git\\|\\kensei\\(data|models|\.venv|reports|out|\.pytest_cache|\.ruff_cache)\\'
 $errors = 0
 
 Write-Host '== PowerShell syntax ==' -ForegroundColor Cyan
 $psFiles = Get-ChildItem -LiteralPath $repo -Recurse -Filter '*.ps1' -File |
-  Where-Object { $_.FullName -notmatch '\\\.git\\' }
+  Where-Object { $_.FullName -notmatch $skip }
 foreach ($file in $psFiles) {
   $tokens = $null
   $parseErrors = $null
@@ -30,7 +31,7 @@ if (-not (Test-Path -LiteralPath $bashPath)) {
 }
 if ($bashPath -and (Test-Path -LiteralPath $bashPath)) {
   $shFiles = Get-ChildItem -LiteralPath $repo -Recurse -Filter '*.sh' -File |
-    Where-Object { $_.FullName -notmatch '\\\.git\\' }
+    Where-Object { $_.FullName -notmatch $skip }
   foreach ($file in $shFiles) {
     $posixPath = $file.FullName.Replace('\', '/')
     & $bashPath -n $posixPath
@@ -48,7 +49,7 @@ if ($bashPath -and (Test-Path -LiteralPath $bashPath)) {
 Write-Host ''
 Write-Host '== JSON ==' -ForegroundColor Cyan
 $jsonFiles = Get-ChildItem -LiteralPath $repo -Recurse -Filter '*.json' -File |
-  Where-Object { $_.FullName -notmatch '\\\.git\\' }
+  Where-Object { $_.FullName -notmatch $skip }
 foreach ($file in $jsonFiles) {
   try {
     Get-Content -LiteralPath $file.FullName -Raw | ConvertFrom-Json | Out-Null

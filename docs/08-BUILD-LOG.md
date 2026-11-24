@@ -169,7 +169,7 @@ Diagnóstico y reparación desde el live ISO:
 - `90-verify.sh`: **67 PASS / 0 WARN / 0 FAIL** (`reports/verify-ronin-final-20261123.json`), con Hyprland/Quickshell, zram (15 GB, zstd), Docker y Vulkan RADV.
 - `omarchy-migrate --pending`: **0**; `pacman -Qu`: **0**.
 - Btrfs: 1 `write_io_errs` histórico por el corte de USB, **0** de corrupción/lectura.
-- Portabilidad: notebook validada (`0C3WG4`, modo `laptop`, perfil `balanced`). Falta el boot de la desktop; procedimiento y criterios en `docs/04-VERIFICATION.md` §5.1.
+- Portabilidad: notebook validada (`0C3WG4`, modo `laptop`, perfil `balanced`) y desktop validada (`B450M DS3H-CF`, modo `desktop`, perfil `performance`, GPU AMD). El verify nativo de la desktop quedó como comprobación opcional.
 - Captura del escritorio: `logs/ronin-ukiyoe-desktop.png`.
 
 ## Tema Ronin tech (2026-11-22)
@@ -178,8 +178,19 @@ Se creó un tema de usuario `~/.config/omarchy/themes/ronin` basado en Kanagawa.
 
 **Wallpaper (23/11):** se reemplazó el SVG generado por arte real de dominio público: *Miyamoto Musashi y Sasaki Kojiro en Ganryujima*, tríptico de **Utagawa Yoshifusa** (c. 1843-1847), 4094×2079 px, vía [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Miyamoto-Musashi-Fights-Sasaki-Kojiro-at-Ganryujima-Ukiyo-e.png). Se recortó a 2560×1440, se graduó para el tema oscuro (brillo 0.84, viñeta y gradiente superior) y se guardó como `build/config/home/ronin-wallpaper-ganryujima.jpg`; el build lo prefiere sobre el SVG (`ronin-wallpaper.svg` queda como fallback). El original vectorial de respaldo está en `~/Pictures/ronin-backups/1-ronin-vector.png`.
 
+### Cierre de portabilidad (2026-11-24)
+
+El mismo NVMe booteó **nativo** en la desktop **Gigabyte B450M DS3H-CF**. El log de `hw-adapt` registra:
+
+```text
+2026-11-24T16:52:36-03:00 profile=performance mode=desktop gpu=AMD
+2026-11-24T16:52:36-03:00 board-changed from=unknown/Standard PC (Q35 + ICH9, 2009) to=B450M DS3H-CF/B450M DS3H
+```
+
+Con la Dell Inspiron (`0C3WG4`, `mode=laptop`, `profile=balanced`, RADV) queda validado el arranque en las dos máquinas físicas. Evidencia local: `reports/hw-adapt-log-portability-20261124.txt`. El `90-verify.sh` nativo de la desktop no se ejecutó; es una comprobación opcional para el próximo boot.
+
 ### Pendiente para F7 (requiere hardware)
 
 1. ~~Snapshot Btrfs inicial (`@`, `@home`) antes de la migración.~~ Hecho antes de migrar.
 2. ~~Ensayo de `migrate-to-nvme.sh` con el NVMe externo de 1 TB.~~ Hecho en QEMU y en el NVMe real; UUIDs preservados y root expandido.
-3. **Boot de validación en la desktop** (la notebook ya está validada con `hw-adapt`, Vulkan y microcode). Es el único paso que falta para cerrar la portabilidad entre las dos máquinas físicas.
+3. ~~Boot de validación en la desktop.~~ Hecho el 24/11; ver § Cierre de portabilidad.

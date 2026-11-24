@@ -74,6 +74,17 @@ printf '%s ALL=(root) NOPASSWD: %s /root/build-scripts/guest/90-verify.sh\n' \
 chmod 440 "/etc/sudoers.d/20-${TARGET_USER}-verify"
 visudo -cf /etc/sudoers >/dev/null || die "sudoers inválido"
 
+# --- CLI Ronin + chequeo diario de updates -----------------------------------
+install -Dm755 "$REPO_DIR/config/usr/local/bin/ronin" /usr/local/bin/ronin
+install -Dm644 "$REPO_DIR/config/etc/systemd/user/ronin-update-check.service" \
+  /etc/systemd/user/ronin-update-check.service
+install -Dm644 "$REPO_DIR/config/etc/systemd/user/ronin-update-check.timer" \
+  /etc/systemd/user/ronin-update-check.timer
+install -d -m755 /etc/systemd/user/timers.target.wants
+ln -sf ../ronin-update-check.timer /etc/systemd/user/timers.target.wants/ronin-update-check.timer
+systemctl --global enable ronin-update-check.timer >/dev/null 2>&1 || true
+log "CLI ronin y chequeo diario de updates instalados"
+
 # --- Manifiesto --------------------------------------------------------------
 install -d -m 755 /etc/ronin /var/log/ronin
 pacman -Qqe > /var/log/ronin/packages.txt

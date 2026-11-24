@@ -273,7 +273,7 @@ Rutas posibles:
 
 **Objetivo:** volcar la imagen al disco final de 1 TB conservando UUIDs y demostrar que arranca.
 
-> **Estado 23/11:** migración real completada y booteada en la Dell Inspiron 15 3525 con **67 PASS / 0 WARN / 0 FAIL**. Falta el boot en la desktop para cerrar la portabilidad entre las dos máquinas físicas.
+> **Estado 24/11:** migración real completada y booteada en la Dell Inspiron 15 3525 (**67 PASS / 0 WARN / 0 FAIL**) y en la desktop **B450M DS3H-CF** (`mode=desktop`, `profile=performance`, GPU AMD). Portabilidad validada; el `90-verify.sh` nativo de la desktop queda como comprobación opcional.
 
 ### Tareas
 
@@ -285,6 +285,7 @@ Rutas posibles:
 - [x] Verificar que `fstab` y `root=UUID=` siguen válidos sin edición.
 - [x] Arrancar desde el disco migrado (QEMU `-boot order=c` con el segundo disco como principal).
 - [x] Pasar `90-verify.sh` en el disco migrado y en hardware real.
+- [x] Boot nativo en la segunda máquina física (desktop B450M DS3H-CF; `hw-adapt` mode=desktop/performance).
 - [ ] Ensayar rollback (la imagen original queda intacta). No se ejecutó un rollback formal porque la migración no falló; el `.img` original sigue disponible.
 
 ### Criterios de salida
@@ -376,3 +377,4 @@ Actualizar esta sección al cerrar cada fase.
 | 2026-11-20 | F7 | Migración al NVMe de 1 TB; primer boot real en la Inspiron y fixes de Omarchy | `docs/08-BUILD-LOG.md` |
 | 2026-11-22 | F7 | Microcode y Vulkan (RADV) resueltos en hardware real: **67 PASS / 0 WARN / 0 FAIL** | `reports/verify-ronin-real-final.json` |
 | 2026-11-23 | F7 | Kernel 7.3.5, 0 migraciones/updates y tema Ronin con ukiyo-e de Musashi | `reports/verify-ronin-final-20261123.json` |
+| 2026-11-24 | F7 | Boot nativo en desktop B450M DS3H-CF; `mode=desktop`, `profile=performance`, GPU AMD | `reports/hw-adapt-log-portability-20261124.txt` |

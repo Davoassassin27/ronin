@@ -1,0 +1,49 @@
+# NOTICE — Ronin
+
+Ronin is an integration and configuration project. It builds on software
+maintained by other people; each upstream component keeps its own license.
+
+## Ronin original work
+
+- Code, scripts and configuration: MIT. See [LICENSE](LICENSE).
+- Documentation and brand assets: CC BY 4.0. See [LICENSE-DOCS](LICENSE-DOCS).
+  Attribution: "Ronin — https://github.com/Davoassassin27/ronin".
+
+## Upstream components
+
+| Component | License | Source |
+| --- | --- | --- |
+| CachyOS / Arch Linux packages | per package (mostly GPL, MIT, BSD, Apache) | https://github.com/CachyOS |
+| Linux kernel (`linux-cachyos`) | GPL-2.0 (kernel); GPL-3.0 (repo tooling) | https://github.com/CachyOS/linux-cachyos |
+| Omarchy | MIT | https://github.com/omacom/omarchy |
+| Hyprland | BSD-3-Clause | https://github.com/hyprwm/Hyprland |
+| Quickshell | LGPL-3.0 | https://github.com/quickshell-mirror/quickshell |
+| Ollama | MIT | https://github.com/ollama/ollama |
+| Qwen2.5-Coder-7B-Instruct | Apache-2.0 | https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct |
+| Kensei | MIT (code only) | https://github.com/Davoassassin27/kensei |
+
+Package licenses are recorded by pacman under `/usr/share/licenses/` in the
+installed system and should be reviewed before redistributing a built image.
+
+## Brand and artwork
+
+- The Ronin profile silhouette is adapted from a CC0 image from The Met:
+  https://commons.wikimedia.org/wiki/File:Silhouette_of_a_man_in_profile_to_the_right_Met_DP887354.jpg
+- The desktop wallpaper is a public-domain ukiyo-e print by Utagawa Yoshifusa
+  (Miyamoto Musashi and the whale). It is not part of the code license.
+- The "Ronin" and "Kensei" marks in `brand/` are original vector adaptations
+  released under CC BY 4.0. Do not imply endorsement by the upstream projects.
+
+## Kensei data and weights
+
+Kensei's training corpus, derived datasets and model weights are **not**
+distributed from this repository. Their upstream terms include CC BY-NC 4.0,
+GFDL, GPL and CC BY, and some combinations are not redistributable as a single
+open dataset. Model weights are subject to the base model's Apache-2.0 terms
+and to the licenses of the data used for fine-tuning.
+
+## No warranty
+
+The software is provided "as is", without warranty of any kind. Building,
+installing or migrating a system can destroy data. Verify hashes, keep backups
+and test on disposable media first.

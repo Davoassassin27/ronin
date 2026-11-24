@@ -1,0 +1,348 @@
+{
+  "schema": 1,
+  "timestamp": "2026-11-23T18:01:06-03:00",
+  "hostname": "ronin",
+  "kernel": "7.3.5-2-cachyos",
+  "summary": {
+    "pass": 67,
+    "warn": 0,
+    "fail": 0
+  },
+  "checks": [
+    {
+      "id": "BOOT-01",
+      "status": "pass",
+      "detail": "Fallback EFI existe"
+    },
+    {
+      "id": "BOOT-02",
+      "status": "pass",
+      "detail": "systemd-boot operativo"
+    },
+    {
+      "id": "BOOT-03",
+      "status": "pass",
+      "detail": "Entry root=UUID"
+    },
+    {
+      "id": "BOOT-04",
+      "status": "pass",
+      "detail": "Kernel linux-cachyos"
+    },
+    {
+      "id": "BOOT-05",
+      "status": "pass",
+      "detail": "mkinitcpio -P"
+    },
+    {
+      "id": "BOOT-06",
+      "status": "pass",
+      "detail": "Microcode cargado"
+    },
+    {
+      "id": "BOOT-07",
+      "status": "pass",
+      "detail": "Secure Boot deshabilitado"
+    },
+    {
+      "id": "REPO-01",
+      "status": "pass",
+      "detail": "Repo CachyOS configurado"
+    },
+    {
+      "id": "REPO-02",
+      "status": "pass",
+      "detail": "Repo CachyOS x86-64-v3 configurado"
+    },
+    {
+      "id": "REPO-03",
+      "status": "pass",
+      "detail": "Paquetes base x86-64-v3"
+    },
+    {
+      "id": "FS-01",
+      "status": "pass",
+      "detail": "GPT con 3 particiones (migrado)"
+    },
+    {
+      "id": "FS-02",
+      "status": "pass",
+      "detail": "DATOS exFAT"
+    },
+    {
+      "id": "FS-03",
+      "status": "pass",
+      "detail": "Root Btrfs (p3)"
+    },
+    {
+      "id": "FS-04",
+      "status": "pass",
+      "detail": "Sin swap física (solo zram)"
+    },
+    {
+      "id": "FS-05",
+      "status": "pass",
+      "detail": "6 subvolúmenes"
+    },
+    {
+      "id": "FS-06",
+      "status": "pass",
+      "detail": "Root en subvol @"
+    },
+    {
+      "id": "FS-07",
+      "status": "pass",
+      "detail": "Opciones Btrfs root"
+    },
+    {
+      "id": "FS-08",
+      "status": "pass",
+      "detail": "Docker nodatacow (chattr +C)"
+    },
+    {
+      "id": "FS-09",
+      "status": "pass",
+      "detail": "fstab sin PARTUUID"
+    },
+    {
+      "id": "FS-10",
+      "status": "pass",
+      "detail": "fstab válido"
+    },
+    {
+      "id": "FS-11",
+      "status": "pass",
+      "detail": "zram activo"
+    },
+    {
+      "id": "FS-12",
+      "status": "pass",
+      "detail": "Espacio root > 20 GiB"
+    },
+    {
+      "id": "SVC-NetworkManager",
+      "status": "pass",
+      "detail": "enabled: NetworkManager"
+    },
+    {
+      "id": "SVC-sshd",
+      "status": "pass",
+      "detail": "enabled: sshd"
+    },
+    {
+      "id": "SVC-docker",
+      "status": "pass",
+      "detail": "enabled: docker"
+    },
+    {
+      "id": "SVC-ollama",
+      "status": "pass",
+      "detail": "enabled: ollama"
+    },
+    {
+      "id": "SVC-hw-adapt",
+      "status": "pass",
+      "detail": "enabled: hw-adapt"
+    },
+    {
+      "id": "SVC-sddm",
+      "status": "pass",
+      "detail": "enabled: sddm"
+    },
+    {
+      "id": "SVC-ufw",
+      "status": "pass",
+      "detail": "enabled: ufw"
+    },
+    {
+      "id": "SVC-systemd-timesyncd",
+      "status": "pass",
+      "detail": "enabled: systemd-timesyncd"
+    },
+    {
+      "id": "SVC-09",
+      "status": "pass",
+      "detail": "docker/ollama/NM activos"
+    },
+    {
+      "id": "SVC-10",
+      "status": "pass",
+      "detail": "hw-adapt ejecutado"
+    },
+    {
+      "id": "HW-01",
+      "status": "pass",
+      "detail": "hw-adapt JSON válido"
+    },
+    {
+      "id": "HW-02",
+      "status": "pass",
+      "detail": "hw-adapt schema"
+    },
+    {
+      "id": "HW-03",
+      "status": "pass",
+      "detail": "Board coincide con DMI"
+    },
+    {
+      "id": "HW-04",
+      "status": "pass",
+      "detail": "Perfil coherente"
+    },
+    {
+      "id": "HW-05",
+      "status": "pass",
+      "detail": "Log hw-adapt existe"
+    },
+    {
+      "id": "HW-06",
+      "status": "pass",
+      "detail": "ai-gpu-env sintaxis"
+    },
+    {
+      "id": "HW-07",
+      "status": "pass",
+      "detail": "Hyprland Lua source hardware"
+    },
+    {
+      "id": "HW-08",
+      "status": "pass",
+      "detail": "Initramfs UAS/USB (módulo o built-in)"
+    },
+    {
+      "id": "HW-09",
+      "status": "pass",
+      "detail": "Initramfs NVMe/AHCI (módulo o built-in)"
+    },
+    {
+      "id": "HW-10",
+      "status": "pass",
+      "detail": "Initramfs GPUs"
+    },
+    {
+      "id": "HW-13",
+      "status": "pass",
+      "detail": "Omarchy bootstrap accesible"
+    },
+    {
+      "id": "HW-14",
+      "status": "pass",
+      "detail": "OMARCHY_PATH en entorno"
+    },
+    {
+      "id": "HW-15",
+      "status": "pass",
+      "detail": "Shell Omarchy instalado"
+    },
+    {
+      "id": "HW-11",
+      "status": "pass",
+      "detail": "Cambio de placa detectado"
+    },
+    {
+      "id": "HW-12",
+      "status": "pass",
+      "detail": "Modo laptop simulado"
+    },
+    {
+      "id": "DEV-01",
+      "status": "pass",
+      "detail": "Toolchain (usuario)"
+    },
+    {
+      "id": "DEV-02",
+      "status": "pass",
+      "detail": "DB clients"
+    },
+    {
+      "id": "DEV-03",
+      "status": "pass",
+      "detail": "Docker root dir"
+    },
+    {
+      "id": "DEV-04",
+      "status": "pass",
+      "detail": "Docker hello-world"
+    },
+    {
+      "id": "DEV-05",
+      "status": "pass",
+      "detail": "Usuario en grupo docker"
+    },
+    {
+      "id": "AI-01",
+      "status": "pass",
+      "detail": "Ollama activo"
+    },
+    {
+      "id": "AI-02",
+      "status": "pass",
+      "detail": "Ollama API"
+    },
+    {
+      "id": "AI-03",
+      "status": "pass",
+      "detail": "Directorio de modelos"
+    },
+    {
+      "id": "AI-04",
+      "status": "pass",
+      "detail": "Vulkan"
+    },
+    {
+      "id": "AI-05",
+      "status": "pass",
+      "detail": "Monitores GPU"
+    },
+    {
+      "id": "GAME-01",
+      "status": "pass",
+      "detail": "Gaming meta instalado"
+    },
+    {
+      "id": "GAME-02",
+      "status": "pass",
+      "detail": "Sin launchers al boot"
+    },
+    {
+      "id": "GAME-03",
+      "status": "pass",
+      "detail": "MangoHud"
+    },
+    {
+      "id": "SEC-01",
+      "status": "pass",
+      "detail": "Root SSH solo clave"
+    },
+    {
+      "id": "SEC-02",
+      "status": "pass",
+      "detail": "Password SSH off"
+    },
+    {
+      "id": "SEC-03",
+      "status": "pass",
+      "detail": "UFW activo"
+    },
+    {
+      "id": "SEC-04",
+      "status": "pass",
+      "detail": "sysctl hardening"
+    },
+    {
+      "id": "SEC-05",
+      "status": "pass",
+      "detail": "build-scripts sin lectura pública"
+    },
+    {
+      "id": "SEC-06",
+      "status": "pass",
+      "detail": "Credenciales 600"
+    },
+    {
+      "id": "SEC-07",
+      "status": "pass",
+      "detail": "sudoers válido"
+    }
+  ]
+}

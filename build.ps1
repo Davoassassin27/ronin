@@ -152,6 +152,7 @@ switch ($Command.ToLower()) {
       '40-hw-adapt.sh',
       '50-omarchy.sh',
       '60-dev-ai.sh',
+      '65-kensei.sh',
       '70-gaming.sh',
       '80-harden.sh',
       '90-verify.sh'

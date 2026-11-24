@@ -1,0 +1,141 @@
+#!/usr/bin/env bash
+# Ronin - comandos de sistema
+set -Eeuo pipefail
+
+LOG_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/ronin/updates"
+mkdir -p "$LOG_DIR"
+
+usage() {
+  cat <<'EOF'
+Uso:
+  ronin update            Aplica la actualización de Omarchy/CachyOS (manual)
+  ronin update --check    Solo chequea paquetes y migraciones
+  ronin update --check --notify
+                          Chequea y manda notificación si hay updates
+  ronin status            Estado del sistema, updates y sync de Kensei
+  ronin --update          Alias de `ronin update`
+  ronin help              Esta ayuda
+
+El update real lo hace Omarchy: `omarchy update`.
+No usar `pacman -Syu` directo; Omarchy lo bloquea y saltea migraciones.
+EOF
+}
+
+notify() {
+  local summary="$1" body="${2:-}"
+  if command -v omarchy-notification-send >/dev/null 2>&1; then
+    omarchy-notification-send "$summary" "$body" >/dev/null 2>&1 || true
+  elif command -v notify-send >/dev/null 2>&1; then
+    notify-send "$summary" "$body" >/dev/null 2>&1 || true
+  fi
+}
+
+require_user() {
+  if (( EUID == 0 )); then
+    echo "Ronin: corré 'ronin update' como usuario, no con sudo." >&2
+    echo "Omarchy pide sudo internamente y necesita las migraciones de tu usuario." >&2
+    exit 1
+  fi
+}
+
+check_updates() {
+  local out pending
+  out=$(omarchy update available 2>&1 || true)
+  pending=$(omarchy-migrate --pending 2>/dev/null || true)
+
+  if grep -qi 'up to date' <<<"$out" && [[ -z $pending ]]; then
+    echo "Ronin: sistema al día."
+    return 0
+  fi
+
+  printf '%s\n' "$out"
+  if [[ -n $pending ]]; then
+    echo "Migraciones pendientes:"
+    printf '%s\n' "$pending"
+  fi
+  return 10
+}
+
+cmd_update() {
+  local check=0 do_notify=0
+  while (($#)); do
+    case "$1" in
+      --check) check=1 ;;
+      --notify) do_notify=1 ;;
+      *) usage; exit 2 ;;
+    esac
+    shift
+  done
+
+  require_user
+
+  if (( check )); then
+    local rc=0
+    set +e
+    check_updates
+    rc=$?
+    set -e
+    if (( rc == 10 && do_notify )); then
+      notify "Ronin: updates disponibles" "Ejecutá: ronin update"
+      exit 0
+    fi
+    exit "$rc"
+  fi
+
+  if ! command -v omarchy >/dev/null 2>&1; then
+    echo "Ronin: no encontré omarchy." >&2
+    exit 1
+  fi
+  if [[ -e /var/lib/pacman/db.lck ]]; then
+    echo "Ronin: pacman está bloqueado (/var/lib/pacman/db.lck)." >&2
+    exit 1
+  fi
+  local avail
+  avail=$(df --output=avail -BG / 2>/dev/null | tail -n 1 | tr -dc '0-9')
+  if [[ -n $avail ]] && (( avail < 5 )); then
+    echo "Ronin: menos de 5 GB libres; liberá espacio antes de actualizar." >&2
+    exit 1
+  fi
+
+  echo "Ronin: actualizando con Omarchy..."
+  if omarchy update; then
+    local log="$LOG_DIR/omarchy-$(date +%Y%m%d-%H%M%S).log"
+    cp -f /tmp/omarchy-update.log "$log" 2>/dev/null || true
+    notify "Ronin: update terminado" "Revisá si hace falta reiniciar."
+    echo "Ronin: update OK. Log: $log"
+  else
+    local rc=$?
+    local log="$LOG_DIR/omarchy-$(date +%Y%m%d-%H%M%S).log"
+    cp -f /tmp/omarchy-update.log "$log" 2>/dev/null || true
+    notify "Ronin: update falló" "Ver $log"
+    echo "Ronin: update falló (rc=$rc). Log: $log" >&2
+    exit "$rc"
+  fi
+}
+
+cmd_status() {
+  echo "Host: $(hostname) / $(uname -r)"
+  if [[ -r /var/log/hw-adapt-last.json ]] && command -v jq >/dev/null 2>&1; then
+    jq -c '{board,product,mode,profile,changed_board}' /var/log/hw-adapt-last.json 2>/dev/null || true
+  fi
+  if command -v omarchy >/dev/null 2>&1; then
+    set +e
+    check_updates
+    set -e
+  fi
+  echo "Último log: $(ls -1t "$LOG_DIR"/omarchy-*.log 2>/dev/null | head -n 1 || echo '(ninguno)')"
+  if [[ -f "$HOME/workspace/kensei/.ronin-sync" ]]; then
+    echo "Kensei sync: $(cat "$HOME/workspace/kensei/.ronin-sync")"
+  else
+    echo "Kensei sync: (no sincronizado)"
+  fi
+  systemctl is-system-running 2>/dev/null || true
+}
+
+case "${1:-}" in
+  update) shift; cmd_update "$@" ;;
+  --update) shift; cmd_update ;;
+  status) cmd_status ;;
+  help|-h|--help) usage ;;
+  *) usage; exit 2 ;;
+esac
