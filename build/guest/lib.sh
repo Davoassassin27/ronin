@@ -41,7 +41,7 @@ load_config() {
   : "${INSTALL_KENSEI:=yes}"
   : "${KENSEI_PRELOAD_MODEL:=no}"
   : "${KENSEI_REPO:=https://github.com/Davoassassin27/kensei.git}"
-  : "${KENSEI_REF:=main}"
+  : "${KENSEI_REF:=v0.1.0}"
   : "${ENABLE_FIREWALL:=yes}"
   : "${OMARCHY_AUTOLOGIN:=yes}"
 }
