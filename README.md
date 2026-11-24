@@ -7,6 +7,7 @@
 [![MIT](https://img.shields.io/badge/license-MIT-111111?style=flat-square)](LICENSE)
 [![Docs CC BY 4.0](https://img.shields.io/badge/docs-CC%20BY%204.0-e6c384?style=flat-square&labelColor=111111)](LICENSE-DOCS)
 [![Verificado](https://img.shields.io/badge/verificado-67%20PASS%20%2F%200%20FAIL-2ea043?style=flat-square&labelColor=111111)](#verificación-en-hardware-real)
+[![lint](https://github.com/Davoassassin27/ronin/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/Davoassassin27/ronin/actions/workflows/lint.yml)
 [![CachyOS](https://img.shields.io/badge/CachyOS-x86--64--v3-1793d1?style=flat-square&labelColor=111111)](https://cachyos.org)
 [![Omarchy](https://img.shields.io/badge/Omarchy-Hyprland-e6c384?style=flat-square&labelColor=111111)](https://omarchy.org)
 
