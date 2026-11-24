@@ -59,12 +59,12 @@ fi
 if [[ -d /etc/${OLD} ]]; then
   mkdir -p /etc/${NAME}
   cp -a /etc/${OLD}/. /etc/${NAME}/ 2>/dev/null || true
-  rm -rf /etc/${OLD}
+  rm -rf "/etc/${OLD:?}"
 fi
 if [[ -d /var/log/${OLD} ]]; then
   mkdir -p /var/log/${NAME}
   cp -a /var/log/${OLD}/. /var/log/${NAME}/ 2>/dev/null || true
-  rm -rf /var/log/${OLD}
+  rm -rf "/var/log/${OLD:?}"
 fi
 shopt -s nullglob
 for f in /var/log/${OLD}-*; do

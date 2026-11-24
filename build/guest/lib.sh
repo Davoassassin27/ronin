@@ -20,8 +20,8 @@ require_file() { [[ -f "$1" ]] || die "Falta el archivo: $1"; }
 
 load_config() {
   [[ -f "$CONFIG_FILE" ]] || die "Falta $CONFIG_FILE (ejecutar .\\build.ps1 push)"
-  # shellcheck disable=SC1090
   set -a
+  # shellcheck disable=SC1090
   . "$CONFIG_FILE"
   set +a
 
