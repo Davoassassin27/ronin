@@ -20,7 +20,7 @@ brand/
     png/                    ← exports 1024 px
     README.md               ← guía de marca
   README.md                 ← este archivo
-kensei/
+kensei/                     ← checkout local del repo separado (no versionado acá)
   brand/
     logo/
     icons/
@@ -28,7 +28,7 @@ kensei/
     README.md
 ```
 
-Los archivos de exploración quedan en `build/brand/` y **no** son oficiales.
+Los archivos de exploración interna no se publican; solo `brand/` es oficial.
 
 ## Reglas de familia
 
@@ -55,7 +55,7 @@ Ejemplo: animar `#wheat` con una rotación leve, `#eye` con un parpadeo de opaci
 ## Reproducir
 
 - Maestros y variantes: `python brand/tools/build_brand.py` (lee los SVG base de `brand/sources/`; si `kensei/` está clonado, también genera su marca).
-- Lámina de familia: `python brand/tools/make_family.py`.
+- Lámina de familia: `python brand/tools/make_family.py` (requiere `kensei/` clonado con sus PNG).
 - Los exports de iconos se generaron con `export_variants.py` del skill de logo design.
 
 ## Licencia
